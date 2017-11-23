@@ -7,11 +7,10 @@
       debconf: name='oracle-java8-installer' question='shared/accepted-oracle-license-v1-1' value='true' vtype='select'
     - name: Install Java
       package: name='oracle-java8-installer' state=latest
- #   - name: set java home
-#      lineinfile: dest=/etc/profile line='export JAVA_HOME=/usr/local' insertafter='EOF'
- #   - shell: source "/etc/profile" && echo $JAVA_HOME
+    - name: set java home
+      lineinfile: dest=/etc/profile line='export JAVA_HOME=/usr/local' insertafter='EOF'
+    - shell: source "/etc/profile" && echo $JAVA_HOME
       register: test
     - debug: var=test.stdout
 
-#    - name: install maven
       
