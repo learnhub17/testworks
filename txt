@@ -1,0 +1,5 @@
+Write an Ansible playbook ...
+1. Install Java
+2. Deploy Petclinic JAR
+3. Run petclinic JAR application
+https://github.com/savishy/spring-petclinic

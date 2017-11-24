@@ -1,26 +1,26 @@
 ---
 - hosts: localhost
   tasks:
-#    - name: installing repo for Java 8 in Ubuntu
-#      apt_repository: repo='ppa:webupd8team/java' update-cache=yes
-#    - name: config java
-#      debconf: name='oracle-java8-installer' question='shared/accepted-oracle-license-v1-1' value='true' vtype='select'
-#    - name: Install Java
-#      package: name='oracle-java8-installer' state=latest
-     - name: set java home
-       lineinfile: dest=/etc/profile line='export JAVA_HOME=/usr/lib/jvm/java-8-oracle' insertafter='EOF'
-#     - name: install maven
-#       package: name='maven' state=latest update_cache=yes
-     - name: config maven home
-       lineinfile: dest=/etc/profile line='export M2_HOME=/usr/share/maven' insertafter='EOF'
-     - shell: echo JAVA_HOME is $JAVA_HOME
+    - name: installing repo for Java 8 in Ubuntu
+      apt_repository: repo='ppa:webupd8team/java' update-cache=yes
+    - name: config java
+      debconf: name='oracle-java8-installer' question='shared/accepted-oracle-license-v1-1' value='true' vtype='select'
+    - name: Install Java
+      package: name='oracle-java8-installer' state=latest
+    - name: set java home
+      lineinfile: dest=/etc/profile line='export JAVA_HOME=/usr/lib/jvm/java-8-oracle' insertafter='EOF'
+    - name: install maven
+      package: name='maven' state=latest update_cache=yes
+    - name: config maven home
+      lineinfile: dest=/etc/profile line='export M2_HOME=/usr/share/maven' insertafter='EOF'
+    - shell: echo JAVA_HOME is $JAVA_HOME
        environment:
          JAVA_HOME: /usr/lib/jvm/java-8-oracle
-       register: shellout
-     - debug: var=shellout
-
-     - shell: echo M2_HOME is $M2_HOME
+      register: shellout
+    - debug: var=shellout
+    - shell: echo M2_HOME is $M2_HOME
        environment:
           M2_HOME: /usr/share/maven
        register: shellout
-     - debug: var=shellout
+    - debug: var=shellout
+
