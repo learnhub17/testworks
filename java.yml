@@ -9,18 +9,24 @@
       package: name='oracle-java8-installer' state=latest
     - name: set java home
       lineinfile: dest=/etc/profile line='export JAVA_HOME=/usr/lib/jvm/java-8-oracle' insertafter='EOF'
-    - name: install maven
-      package: name='maven' state=latest update_cache=yes
-    - name: config maven home
-      lineinfile: dest=/etc/profile line='export M2_HOME=/usr/share/maven' insertafter='EOF'
-    - shell: echo JAVA_HOME is $JAVA_HOME
-      environment:
-         JAVA_HOME: /usr/lib/jvm/java-8-oracle
-      register: shellout
-    - debug: var=shellout
-    - shell: echo M2_HOME is $M2_HOME
-      environment:
-         M2_HOME: /usr/share/maven
-      register: shellout
-    - debug: var=shellout
+    - shell: . /etc/profile executable=/bin/bash 
 
+    - name: Download maven
+      get_url: url=https://archive.apache.org/dist/maven/maven-3/3.1.1/binaries/apache-maven-3.1.1-bin.tar.gz dest=/usr/local
+    - name: extract maven
+      shell: chdir=/usr/local tar -zxf apache-maven-3.1.1-bin.tar.gz
+    - name: export maven
+      shell: export PATH=/usr/local/apache-maven-3.1.1/bin:$PATH
+    - name: config maven home
+      lineinfile: dest=/etc/profile line='export M2_HOME=/usr/local/apache-maven-3.1.1' insertafter='EOF'
+    - file: src=/usr/local/apache-maven-3.1.1/bin/mvn dest=/usr/bin/mvn state=link
+    - name: export maven
+      shell: export PATH=/usr/local/apache-maven-3.1.1/bin:$PATH
+
+    - name: Clone petclinic repo
+      git: repo=https://github.com/savishy/spring-petclinic dest=/opt/test
+    - name: build project
+      shell: mvn clean package chdir=/opt/test 
+
+    - name: run project
+      shell: nohup java -jar *jar & chdir=/opt/test/target
